@@ -82,15 +82,15 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
 
 <div class="card">
  <h2>4. Read the sentences</h2>
- <p class="meta">Each student typed <b>5 short lines</b>. The page checked each one (0 to 3 points). Read them. If you disagree, change the score in the box. The final score updates, and your changes stay saved in this browser. The other 13 pages were tap pages (2 points each, half for a second try); the page scored those on its own.</p>
- <details class="models"><summary>Show the 5 typed lines and one strong version of each</summary><div id="models"></div></details>
+ <p class="meta">Each student typed <b>4 short lines</b>. The page checked each one (0 to 3 points). Read them. If you disagree, change the score in the box. The final score updates, and your changes stay saved in this browser. The other 14 pages were tap pages (3 points on the first try, 2 on the second, and on the build pages 1 on the third); the page scored those on its own.</p>
+ <details class="models"><summary>Show the 4 typed lines and one strong version of each</summary><div id="models"></div></details>
  <div id="students" style="margin-top:14px"></div>
  <div id="unmatched"></div>
 </div>
 
 <div class="card">
  <h2>5. Blackboard upload file</h2>
- <p class="meta">Points out of 41 become a <b>percent</b> (for example 35 of 41 = 85). The Grade Center column shows Percentage first, so the file carries percents, the same as the last activity. Students with no record are left <b>blank</b>, never zero. Decide zeros afterwards, and type them in the Grade Center.</p>
+ <p class="meta">Points out of 54 become a <b>percent</b> (for example 46 of 54 = 85). The Grade Center column shows Percentage first, so the file carries percents, the same as the last activity. Students with no record are left <b>blank</b>, never zero. Decide zeros afterwards, and type them in the Grade Center.</p>
  <div class="row">
   <div style="flex:1"><label for="colHeader">Grade Center column header</label><input type="text" id="colHeader" style="width:100%" placeholder="In Class Activity 3 [Total Pts: 10 Percentage] |4763083"></div>
   <div><button class="btn" id="bbBtn">Download upload file</button></div>
@@ -103,8 +103,8 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
 <script>
 const SALT1 = "northline-ctstate-2026";
 const ENDPOINT_DEFAULT = "https://script.google.com/macros/s/AKfycbz8sy_FMZsIJuAOQOtbmRqBn-P03bvZCW-Dev7BEBSWBblCSi0RF1CMTMS39JCzWvTgOQ/exec";
-const MAX = 41;
-const TYPED = [{"where": "🛒 Cart checklist (tool 1, same start)", "long": "The last line was: The carts should be lined up by the door", "limit": 8, "model": "Line up the carts by the door", "checks": ["Kept the facts: the carts and the door", "Starts with an action word, like Collect and Wipe", "8 words or fewer"]}, {"where": "🧊 Cooler door sign (tool 2, the line before a list)", "long": "Priya said: These four things moved to aisle 2. Tell the shoppers. The list under it: Milk, Eggs, Butter, Yogurt", "limit": 8, "model": "Now in aisle 2:", "checks": ["Says what the list is: these things are in aisle 2 now", "Ends with a colon", "8 words or fewer"]}, {"where": "📧 Staff email, topic 3 header (tool 3, bold headers)", "long": "The part: Flu shots are free for staff this Friday. Sign up at the pharmacy counter.", "limit": 3, "model": "Flu shots", "checks": ["Names the topic: the flu shots", "It is a label, not a sentence", "3 words or fewer"]}, {"where": "📧 Inventory email, header for the blue block (put it together)", "long": "The block: Please arrive by 6:30 AM and use the back entrance because the front doors stay locked until 9:00.", "limit": 3, "model": "Arrival", "checks": ["Names the topic: arriving", "It is a label, not a sentence", "3 words or fewer"]}, {"where": "📧 Inventory email, third line of the yellow block (put it together)", "long": "The lines: Closed shoes. A water bottle. You should have your phone charger.", "limit": 4, "model": "A phone charger", "checks": ["Kept the fact: the phone charger", "Starts with the thing, like Closed shoes and A water bottle", "4 words or fewer"]}];
+const MAX = 54;
+const TYPED = [{"where": "🛒 Cart checklist (tool 1, same start)", "long": "The last line was: The carts should be lined up by the door", "limit": 8, "model": "Line up the carts by the door", "checks": ["Kept the facts: the carts and the door", "Starts with an action word, like Collect and Wipe", "8 words or fewer"]}, {"where": "🧊 Cooler door sign (tool 2, the line before a list)", "long": "Priya said: These four things moved to aisle 2. Tell the shoppers. The list under it: Milk, Eggs, Butter, Yogurt", "limit": 8, "model": "Now in aisle 2:", "checks": ["Says what the list is: these things are in aisle 2 now", "Ends with a colon", "8 words or fewer"]}, {"where": "📧 Staff email, topic 3 header (tool 3, bold headers)", "long": "The part: Flu shots are free for staff this Friday. Sign up at the pharmacy counter.", "limit": 3, "model": "Flu shots", "checks": ["Names the topic: the flu shots", "It is a label, not a sentence", "3 words or fewer"]}, {"where": "📧 Teams meeting email, header for the blue block (put it together)", "long": "The block: It will be on Teams this time because Dana from the main office is joining, the link is in the calendar invite I sent this morning, and please join five minutes early so we can start on time.", "limit": 3, "model": "Joining the meeting", "checks": ["Names the topic: joining the meeting (join, link, when, Teams)", "It is a label, not a sentence", "3 words or fewer"]}];
 const OWN_RUNS = {"38693D":"Professor Calafiore's own try (Oct 14)"};
 const $ = id => document.getElementById(id);
 function lsGet(k, d){ try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } }
@@ -139,13 +139,13 @@ function overKey(){ return "lio_over_" + $("activity").value + "_" + $("section"
 function getOver(){ return lsGet(overKey(), {}); }
 function setOver(rid, k, v){ const o = getOver(); o[rid] = o[rid] || {}; if(v === "") delete o[rid][k]; else o[rid][k] = Number(v); lsSet(overKey(), o); }
 function tapPts(r){ const p = parseArr(r.practicePicks); const auto = autoTyped(r); let total = Number(r.score) || 0; return Math.max(0, total - auto.reduce((a, b) => a + b, 0)); }
-function typedPts(r){ const auto = autoTyped(r), o = (getOver()[String(r.recordId)] || {}); let t = 0; for(let k = 0; k < 5; k++){ t += (o[k] !== undefined ? o[k] : (auto[k] || 0)); } return t; }
+function typedPts(r){ const auto = autoTyped(r), o = (getOver()[String(r.recordId)] || {}); let t = 0; for(let k = 0; k < 4; k++){ t += (o[k] !== undefined ? o[k] : (auto[k] || 0)); } return t; }
 function autoTyped(r){ return parseArr(r.checkStatuses).map(s => { const m = String(s).match(/^(\d)/); return m ? Number(m[1]) : 0; }); }
 function finalOf(r){
   if(!r || !r.submittedAt) return null;
   const auto = autoTyped(r), o = (getOver()[String(r.recordId)] || {});
   let total = Number(r.score) || 0;
-  for(let k = 0; k < 5; k++){ if(o[k] !== undefined){ total += o[k] - (auto[k] || 0); } }
+  for(let k = 0; k < 4; k++){ if(o[k] !== undefined){ total += o[k] - (auto[k] || 0); } }
   return Math.max(0, Math.min(MAX, total));
 }
 function tenOf(f){ return f === null ? "" : String(Math.round(f / MAX * 100)); }
@@ -248,10 +248,10 @@ function paint(){
     const f = finalOf(r), changed = f !== Number(r.score);
     return '<div class="stu"><div class="stuhead"><span class="name">' + name + '</span>' +
       '<span class="meta">Started ' + esc(fmt(r.startedAt)) + ' · finished ' + esc(fmt(r.submittedAt)) + ' · ' + esc(r.minutes) + ' min · record ' + esc(String(r.recordId).slice(0, 6).toUpperCase()) + '</span>' +
-      '<span class="final' + (changed ? " changed" : "") + '">' + f + ' / 41 → ' + tenOf(f) + '%' + (changed ? ' (page said ' + esc(r.score) + ')' : '') + '</span></div><div class="meta" style="margin:6px 0 2px">Tap pages: ' + esc(tapPts(r)) + ' of 26 · typed lines: ' + esc(typedPts(r)) + ' of 15</div>' + ansHTML(r) + '</div>';
+      '<span class="final' + (changed ? " changed" : "") + '">' + f + ' / 54 → ' + tenOf(f) + '%' + (changed ? ' (page said ' + esc(r.score) + ')' : '') + '</span></div><div class="meta" style="margin:6px 0 2px">Tap pages: ' + esc(tapPts(r)) + ' of 42 · typed lines: ' + esc(typedPts(r)) + ' of 12</div>' + ansHTML(r) + '</div>';
   }).join("");
   $("unmatched").innerHTML = unmatched.length ? '<h2 style="margin-top:18px">Records that match nobody on the roster (' + unmatched.length + ')</h2><p class="meta">Usually a typo in the 8 digit number, or a try by the professor. Line up the start time with the student who emails, then type that grade by hand.</p>' +
-    unmatched.map(r => '<div class="stu"><div class="stuhead"><span class="name mono">Record ' + esc(String(r.recordId).slice(0, 6).toUpperCase()) + (OWN_RUNS[String(r.recordId).slice(0, 6).toUpperCase()] ? ' · ' + esc(OWN_RUNS[String(r.recordId).slice(0, 6).toUpperCase()]) : '') + '</span><span class="meta">Started ' + esc(fmt(r.startedAt)) + (r.submittedAt ? ' · finished ' + esc(fmt(r.submittedAt)) : ' · not finished') + '</span>' + (r.submittedAt ? '<span class="final">' + finalOf(r) + ' / 41 → ' + tenOf(finalOf(r)) + '%</span>' : '') + '</div>' + (r.submittedAt ? ansHTML(r) : '') + '</div>').join("") : "";
+    unmatched.map(r => '<div class="stu"><div class="stuhead"><span class="name mono">Record ' + esc(String(r.recordId).slice(0, 6).toUpperCase()) + (OWN_RUNS[String(r.recordId).slice(0, 6).toUpperCase()] ? ' · ' + esc(OWN_RUNS[String(r.recordId).slice(0, 6).toUpperCase()]) : '') + '</span><span class="meta">Started ' + esc(fmt(r.startedAt)) + (r.submittedAt ? ' · finished ' + esc(fmt(r.submittedAt)) : ' · not finished') + '</span>' + (r.submittedAt ? '<span class="final">' + finalOf(r) + ' / 54 → ' + tenOf(finalOf(r)) + '%</span>' : '') + '</div>' + (r.submittedAt ? ansHTML(r) : '') + '</div>').join("") : "";
   document.querySelectorAll("select[data-rid]").forEach(sel => sel.addEventListener("change", () => { setOver(sel.dataset.rid, sel.dataset.k, sel.value); paint(); }));
 }
 function csvField(v){ const s = String(v == null ? "" : v); return '"' + s.replace(/"/g, '""') + '"'; }
@@ -268,7 +268,7 @@ $("bbBtn").addEventListener("click", () => {
 });
 $("recBtn").addEventListener("click", () => {
   const {list, unmatched} = joined();
-  const head = ["Last Name", "First Name", "Username", "Record", "Started", "Finished", "Minutes", "Page score /41", "Final /41", "Final %", "Tap pages /26"].concat(TYPED.map((t, k) => "Line " + (k+1))).concat(TYPED.map((t, k) => "Score " + (k+1)));
+  const head = ["Last Name", "First Name", "Username", "Record", "Started", "Finished", "Minutes", "Page score /54", "Final /54", "Final %", "Tap pages /42"].concat(TYPED.map((t, k) => "Line " + (k+1))).concat(TYPED.map((t, k) => "Score " + (k+1)));
   const lines = [head.map(csvField).join(",")];
   const add = (s, r) => { const said = parseArr(r && r.checkAnswers), auto = r ? autoTyped(r) : [], o = r ? (getOver()[String(r.recordId)] || {}) : {};
     lines.push([s ? s.last : "", s ? s.first : "", s ? s.username : "", r ? String(r.recordId).slice(0, 6).toUpperCase() : "", r ? r.startedAt : "", r ? (r.submittedAt || "") : "", r ? r.minutes : "", r ? r.score : "", r && r.submittedAt ? finalOf(r) : "", r && r.submittedAt ? tenOf(finalOf(r)) : "", r && r.submittedAt ? tapPts(r) : ""]
