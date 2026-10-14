@@ -82,15 +82,15 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
 
 <div class="card">
  <h2>4. Read the sentences</h2>
- <p class="meta">Each student typed <b>4 short lines</b>. The page checked each one (0 to 3 points). Read them. If you disagree, change the score in the box. The final score updates, and your changes stay saved in this browser. The other 14 pages were tap pages (3 points on the first try, 2 on the second, and on the build pages 1 on the third); the page scored those on its own.</p>
- <details class="models"><summary>Show the 4 typed lines and one strong version of each</summary><div id="models"></div></details>
+ <p class="meta">Each student typed <b>4 or 5 short lines</b> (4 on version B, 5 on version A). The page checked each one (0 to 3 points). Read them. If you disagree, change the score in the box. The final score updates, and your changes stay saved in this browser. The other pages were tap pages; the page scored those on its own (version B: 3 points on the first try, 2 on the second, 1 on the third on build pages; version A: 2 points, 1 on the second try).</p>
+ <details class="models"><summary>Show the typed lines and one strong version of each</summary><div id="models"></div></details>
  <div id="students" style="margin-top:14px"></div>
  <div id="unmatched"></div>
 </div>
 
 <div class="card">
  <h2>5. Blackboard upload file</h2>
- <p class="meta">Points out of 54 become a <b>percent</b> (for example 46 of 54 = 85). The Grade Center column shows Percentage first, so the file carries percents, the same as the last activity. Students with no record are left <b>blank</b>, never zero. Decide zeros afterwards, and type them in the Grade Center.</p>
+ <p class="meta">Points become a <b>percent</b> of that record's own total (version A is out of 41, version B is out of 54; for example 35 of 41 = 85 and 46 of 54 = 85). The Grade Center column shows Percentage first, so the file carries percents, the same as the last activity. Students with no record are left <b>blank</b>, never zero. Decide zeros afterwards, and type them in the Grade Center.</p>
  <div class="row">
   <div style="flex:1"><label for="colHeader">Grade Center column header</label><input type="text" id="colHeader" style="width:100%" placeholder="In Class Activity 3 [Total Pts: 10 Percentage] |4763083"></div>
   <div><button class="btn" id="bbBtn">Download upload file</button></div>
@@ -104,7 +104,15 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
 const SALT1 = "northline-ctstate-2026";
 const ENDPOINT_DEFAULT = "https://script.google.com/macros/s/AKfycbz8sy_FMZsIJuAOQOtbmRqBn-P03bvZCW-Dev7BEBSWBblCSi0RF1CMTMS39JCzWvTgOQ/exec";
 const MAX = 54;
-const TYPED = [{"where": "🛒 Cart checklist (tool 1, same start)", "long": "The last line was: The carts should be lined up by the door", "limit": 8, "model": "Line up the carts by the door", "checks": ["Kept the facts: the carts and the door", "Starts with an action word, like Collect and Wipe", "8 words or fewer"]}, {"where": "🧊 Cooler door sign (tool 2, the line before a list)", "long": "Priya said: These four things moved to aisle 2. Tell the shoppers. The list under it: Milk, Eggs, Butter, Yogurt", "limit": 8, "model": "Now in aisle 2:", "checks": ["Says what the list is: these things are in aisle 2 now", "Ends with a colon", "8 words or fewer"]}, {"where": "📧 Staff email, topic 3 header (tool 3, bold headers)", "long": "The part: Flu shots are free for staff this Friday. Sign up at the pharmacy counter.", "limit": 3, "model": "Flu shots", "checks": ["Names the topic: the flu shots", "It is a label, not a sentence", "3 words or fewer"]}, {"where": "📧 Teams meeting email, header for the blue block (put it together)", "long": "The block: It will be on Teams this time because Dana from the main office is joining, the link is in the calendar invite I sent this morning, and please join five minutes early so we can start on time.", "limit": 3, "model": "Joining the meeting", "checks": ["Names the topic: joining the meeting (join, link, when, Teams)", "It is a label, not a sentence", "3 words or fewer"]}];
+const TYPED_B = [{"where": "🛒 Cart checklist (tool 1, same start)", "long": "The last line was: The carts should be lined up by the door", "limit": 8, "model": "Line up the carts by the door", "checks": ["Kept the facts: the carts and the door", "Starts with an action word, like Collect and Wipe", "8 words or fewer"]}, {"where": "🧊 Cooler door sign (tool 2, the line before a list)", "long": "Priya said: These four things moved to aisle 2. Tell the shoppers. The list under it: Milk, Eggs, Butter, Yogurt", "limit": 8, "model": "Now in aisle 2:", "checks": ["Says what the list is: these things are in aisle 2 now", "Ends with a colon", "8 words or fewer"]}, {"where": "📧 Staff email, topic 3 header (tool 3, bold headers)", "long": "The part: Flu shots are free for staff this Friday. Sign up at the pharmacy counter.", "limit": 3, "model": "Flu shots", "checks": ["Names the topic: the flu shots", "It is a label, not a sentence", "3 words or fewer"]}, {"where": "📧 Teams meeting email, header for the blue block (put it together)", "long": "The block: It will be on Teams this time because Dana from the main office is joining, the link is in the calendar invite I sent this morning, and please join five minutes early so we can start on time.", "limit": 3, "model": "Joining the meeting", "checks": ["Names the topic: joining the meeting (join, link, when, Teams)", "It is a label, not a sentence", "3 words or fewer"]}];
+const TYPED_A = [{"where": "🛒 Cart checklist (tool 1, same start)", "long": "The last line was: The carts should be lined up by the door", "limit": 8, "model": "Line up the carts by the door", "checks": ["Kept the facts: the carts and the door", "Starts with an action word, like Collect and Wipe", "8 words or fewer"]}, {"where": "🧊 Cooler door sign (tool 2, the line before a list)", "long": "Priya said: These four things moved to aisle 2. Tell the shoppers. The list under it: Milk, Eggs, Butter, Yogurt", "limit": 8, "model": "Now in aisle 2:", "checks": ["Says what the list is: these things are in aisle 2 now", "Ends with a colon", "8 words or fewer"]}, {"where": "📧 Staff email, topic 3 header (tool 3, bold headers)", "long": "The part: Flu shots are free for staff this Friday. Sign up at the pharmacy counter.", "limit": 3, "model": "Flu shots", "checks": ["Names the topic: the flu shots", "It is a label, not a sentence", "3 words or fewer"]}, {"where": "📧 Inventory email, header for the blue block (put it together)", "long": "The block: Please arrive by 6:30 AM and use the back entrance because the front doors stay locked until 9:00.", "limit": 3, "model": "Arrival", "checks": ["Names the topic: arriving", "It is a label, not a sentence", "3 words or fewer"]}, {"where": "📧 Inventory email, third line of the yellow block (put it together)", "long": "The lines: Closed shoes. A water bottle. You should have your phone charger.", "limit": 4, "model": "A phone charger", "checks": ["Kept the fact: the phone charger", "Starts with the thing, like Closed shoes and A water bottle", "4 words or fewer"]}];
+// Version A = the 41 point page (used by the 12:30 class on Wednesday, Oct 14, and by Professor Calafiore's own try). Version B = the 54 point page published Wednesday afternoon (5 topics in the Teams meeting email, 4 typed lines).
+function isA(r){ const m = Number(r && r.maxScore); if(m === 41) return true; if(m === 54) return false; return String((r && r.clientVersion) || "").indexOf("10-12a") >= 0; }
+function maxOf(r){ return isA(r) ? 41 : 54; }
+function typedOf(r){ return isA(r) ? TYPED_A : TYPED_B; }
+function tapMax(r){ return isA(r) ? 26 : 42; }
+function typedMax(r){ return isA(r) ? 15 : 12; }
+function verName(r){ return isA(r) ? "version A, 41 points" : "version B, 54 points"; }
 const OWN_RUNS = {"38693D":"Professor Calafiore's own try (Oct 14)"};
 const $ = id => document.getElementById(id);
 function lsGet(k, d){ try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } }
@@ -139,16 +147,17 @@ function overKey(){ return "lio_over_" + $("activity").value + "_" + $("section"
 function getOver(){ return lsGet(overKey(), {}); }
 function setOver(rid, k, v){ const o = getOver(); o[rid] = o[rid] || {}; if(v === "") delete o[rid][k]; else o[rid][k] = Number(v); lsSet(overKey(), o); }
 function tapPts(r){ const p = parseArr(r.practicePicks); const auto = autoTyped(r); let total = Number(r.score) || 0; return Math.max(0, total - auto.reduce((a, b) => a + b, 0)); }
-function typedPts(r){ const auto = autoTyped(r), o = (getOver()[String(r.recordId)] || {}); let t = 0; for(let k = 0; k < 4; k++){ t += (o[k] !== undefined ? o[k] : (auto[k] || 0)); } return t; }
+function typedPts(r){ const auto = autoTyped(r), o = (getOver()[String(r.recordId)] || {}); let t = 0; for(let k = 0; k < typedOf(r).length; k++){ t += (o[k] !== undefined ? o[k] : (auto[k] || 0)); } return t; }
 function autoTyped(r){ return parseArr(r.checkStatuses).map(s => { const m = String(s).match(/^(\d)/); return m ? Number(m[1]) : 0; }); }
 function finalOf(r){
   if(!r || !r.submittedAt) return null;
   const auto = autoTyped(r), o = (getOver()[String(r.recordId)] || {});
   let total = Number(r.score) || 0;
-  for(let k = 0; k < 4; k++){ if(o[k] !== undefined){ total += o[k] - (auto[k] || 0); } }
-  return Math.max(0, Math.min(MAX, total));
+  for(let k = 0; k < typedOf(r).length; k++){ if(o[k] !== undefined){ total += o[k] - (auto[k] || 0); } }
+  return Math.max(0, Math.min(maxOf(r), total));
 }
-function tenOf(f){ return f === null ? "" : String(Math.round(f / MAX * 100)); }
+function tenOf(f, r){ return f === null ? "" : String(Math.round(f / (r ? maxOf(r) : MAX) * 100)); }
+function pctOf(r){ const f = finalOf(r); return f === null ? null : f / maxOf(r) * 100; }
 async function load(){
   hide("connMsg");
   if(!$("key").value.trim()){ show("connMsg", "Type the instructor key first.", "bad"); return; }
@@ -221,7 +230,7 @@ function joined(){
 }
 function ansHTML(r){
   const said = parseArr(r.checkAnswers), auto = autoTyped(r), o = getOver()[String(r.recordId)] || {};
-  return TYPED.map((t, k) => {
+  return typedOf(r).map((t, k) => {
     const txt = said[k] || "", n = words(txt), cur = o[k] !== undefined ? String(o[k]) : "";
     const opts = ['<option value="">auto (' + (auto[k] || 0) + ')</option>'].concat([0,1,2,3].map(v => '<option value="' + v + '"' + (cur === String(v) ? " selected" : "") + '>' + v + '</option>')).join("");
     return '<div class="ans"><div class="ex">' + (k+1) + '. ' + esc(t.where) + '<br><span class="wc">limit ' + t.limit + ' words</span></div>' +
@@ -232,14 +241,14 @@ function ansHTML(r){
 function paint(){
   const {list, unmatched} = joined();
   const sub = list.filter(j => j.r && j.r.submittedAt), st = list.filter(j => j.r && !j.r.submittedAt);
-  const finals = sub.map(j => finalOf(j.r));
+  const finals = sub.map(j => pctOf(j.r));
   const avg = finals.length ? finals.reduce((a, b) => a + b, 0) / finals.length : null;
   $("stats").innerHTML = roster.length ?
     '<div class="stat"><div class="n">' + roster.length + '</div><div class="l">on the roster</div></div>' +
     '<div class="stat"><div class="n">' + sub.length + '</div><div class="l">finished</div></div>' +
     '<div class="stat"><div class="n">' + st.length + '</div><div class="l">started, not finished</div></div>' +
     '<div class="stat"><div class="n">' + (roster.length - sub.length - st.length) + '</div><div class="l">no record</div></div>' +
-    '<div class="stat"><div class="n">' + (avg === null ? "–" : tenOf(avg) + "%") + '</div><div class="l">class average</div></div>'
+    '<div class="stat"><div class="n">' + (avg === null ? "–" : Math.round(avg) + "%") + '</div><div class="l">class average</div></div>'
     : '<div class="meta">' + rows.length + ' record' + (rows.length === 1 ? "" : "s") + ' loaded. Load a roster to see names.</div>';
   $("students").innerHTML = list.map(({s, r}) => {
     const name = esc((s.first || "") + " " + (s.last || ""));
@@ -248,10 +257,10 @@ function paint(){
     const f = finalOf(r), changed = f !== Number(r.score);
     return '<div class="stu"><div class="stuhead"><span class="name">' + name + '</span>' +
       '<span class="meta">Started ' + esc(fmt(r.startedAt)) + ' · finished ' + esc(fmt(r.submittedAt)) + ' · ' + esc(r.minutes) + ' min · record ' + esc(String(r.recordId).slice(0, 6).toUpperCase()) + '</span>' +
-      '<span class="final' + (changed ? " changed" : "") + '">' + f + ' / 54 → ' + tenOf(f) + '%' + (changed ? ' (page said ' + esc(r.score) + ')' : '') + '</span></div><div class="meta" style="margin:6px 0 2px">Tap pages: ' + esc(tapPts(r)) + ' of 42 · typed lines: ' + esc(typedPts(r)) + ' of 12</div>' + ansHTML(r) + '</div>';
+      '<span class="final' + (changed ? " changed" : "") + '">' + f + ' / ' + maxOf(r) + ' → ' + tenOf(f, r) + '%' + (changed ? ' (page said ' + esc(r.score) + ')' : '') + '</span></div><div class="meta" style="margin:6px 0 2px">' + verName(r) + ' · Tap pages: ' + esc(tapPts(r)) + ' of ' + tapMax(r) + ' · typed lines: ' + esc(typedPts(r)) + ' of ' + typedMax(r) + '</div>' + ansHTML(r) + '</div>';
   }).join("");
   $("unmatched").innerHTML = unmatched.length ? '<h2 style="margin-top:18px">Records that match nobody on the roster (' + unmatched.length + ')</h2><p class="meta">Usually a typo in the 8 digit number, or a try by the professor. Line up the start time with the student who emails, then type that grade by hand.</p>' +
-    unmatched.map(r => '<div class="stu"><div class="stuhead"><span class="name mono">Record ' + esc(String(r.recordId).slice(0, 6).toUpperCase()) + (OWN_RUNS[String(r.recordId).slice(0, 6).toUpperCase()] ? ' · ' + esc(OWN_RUNS[String(r.recordId).slice(0, 6).toUpperCase()]) : '') + '</span><span class="meta">Started ' + esc(fmt(r.startedAt)) + (r.submittedAt ? ' · finished ' + esc(fmt(r.submittedAt)) : ' · not finished') + '</span>' + (r.submittedAt ? '<span class="final">' + finalOf(r) + ' / 54 → ' + tenOf(finalOf(r)) + '%</span>' : '') + '</div>' + (r.submittedAt ? ansHTML(r) : '') + '</div>').join("") : "";
+    unmatched.map(r => '<div class="stu"><div class="stuhead"><span class="name mono">Record ' + esc(String(r.recordId).slice(0, 6).toUpperCase()) + (OWN_RUNS[String(r.recordId).slice(0, 6).toUpperCase()] ? ' · ' + esc(OWN_RUNS[String(r.recordId).slice(0, 6).toUpperCase()]) : '') + '</span><span class="meta">Started ' + esc(fmt(r.startedAt)) + (r.submittedAt ? ' · finished ' + esc(fmt(r.submittedAt)) : ' · not finished') + '</span>' + (r.submittedAt ? '<span class="final">' + finalOf(r) + ' / ' + maxOf(r) + ' → ' + tenOf(finalOf(r), r) + '%</span>' : '') + '</div>' + (r.submittedAt ? ansHTML(r) : '') + '</div>').join("") : "";
   document.querySelectorAll("select[data-rid]").forEach(sel => sel.addEventListener("change", () => { setOver(sel.dataset.rid, sel.dataset.k, sel.value); paint(); }));
 }
 function csvField(v){ const s = String(v == null ? "" : v); return '"' + s.replace(/"/g, '""') + '"'; }
@@ -262,21 +271,21 @@ $("bbBtn").addEventListener("click", () => {
   const header = $("colHeader").value.trim() || "In Class Activity 3 [Total Pts: 10 Percentage]";
   const {list} = joined(); let filled = 0, blank = 0;
   const lines = [["Last Name", "First Name", "Username", header].map(csvField).join(",")];
-  list.forEach(({s, r}) => { let v = ""; if(r && r.submittedAt){ v = tenOf(finalOf(r)); filled++; } else blank++; lines.push([s.last, s.first, s.username, v].map(csvField).join(",")); });
+  list.forEach(({s, r}) => { let v = ""; if(r && r.submittedAt){ v = tenOf(finalOf(r), r); filled++; } else blank++; lines.push([s.last, s.first, s.username, v].map(csvField).join(",")); });
   dl("BUSN 2100 CRN " + $("section").value + " · Activity 3 upload · " + new Date().toISOString().slice(0, 10) + ".csv", lines.join("\r\n") + "\r\n");
   show("exportMsg", "File created: " + filled + " grades (as percents), " + blank + " left blank. Upload it ONE time, into the empty In Class Activity 3 column, after the activity closes.", "ok");
 });
 $("recBtn").addEventListener("click", () => {
   const {list, unmatched} = joined();
-  const head = ["Last Name", "First Name", "Username", "Record", "Started", "Finished", "Minutes", "Page score /54", "Final /54", "Final %", "Tap pages /42"].concat(TYPED.map((t, k) => "Line " + (k+1))).concat(TYPED.map((t, k) => "Score " + (k+1)));
+  const head = ["Last Name", "First Name", "Username", "Record", "Started", "Finished", "Minutes", "Version", "Page score", "Final", "Out of", "Final %", "Tap pages"].concat(TYPED_A.map((t, k) => "Line " + (k+1))).concat(TYPED_A.map((t, k) => "Score " + (k+1)));
   const lines = [head.map(csvField).join(",")];
   const add = (s, r) => { const said = parseArr(r && r.checkAnswers), auto = r ? autoTyped(r) : [], o = r ? (getOver()[String(r.recordId)] || {}) : {};
-    lines.push([s ? s.last : "", s ? s.first : "", s ? s.username : "", r ? String(r.recordId).slice(0, 6).toUpperCase() : "", r ? r.startedAt : "", r ? (r.submittedAt || "") : "", r ? r.minutes : "", r ? r.score : "", r && r.submittedAt ? finalOf(r) : "", r && r.submittedAt ? tenOf(finalOf(r)) : "", r && r.submittedAt ? tapPts(r) : ""]
-      .concat(TYPED.map((t, k) => said[k] || "")).concat(TYPED.map((t, k) => r && r.submittedAt ? (o[k] !== undefined ? o[k] : (auto[k] || 0)) : "")).map(csvField).join(",")); };
+    lines.push([s ? s.last : "", s ? s.first : "", s ? s.username : "", r ? String(r.recordId).slice(0, 6).toUpperCase() : "", r ? r.startedAt : "", r ? (r.submittedAt || "") : "", r ? r.minutes : "", r ? (isA(r) ? "A" : "B") : "", r ? r.score : "", r && r.submittedAt ? finalOf(r) : "", r ? maxOf(r) : "", r && r.submittedAt ? tenOf(finalOf(r), r) : "", r && r.submittedAt ? tapPts(r) : ""]
+      .concat(TYPED_A.map((t, k) => (r && k < typedOf(r).length) ? (said[k] || "") : "")).concat(TYPED_A.map((t, k) => (r && r.submittedAt && k < typedOf(r).length) ? (o[k] !== undefined ? o[k] : (auto[k] || 0)) : "")).map(csvField).join(",")); };
   list.forEach(({s, r}) => add(s, r)); unmatched.forEach(r => add(null, r));
   dl("BUSN 2100 CRN " + $("section").value + " · Activity 3 records · " + new Date().toISOString().slice(0, 10) + ".csv", lines.join("\r\n") + "\r\n");
 });
-$("models").innerHTML = TYPED.map((t, k) => '<div class="model"><b>' + (k+1) + '. ' + esc(t.where) + '</b> (limit ' + t.limit + ' words)<br>Long version: ' + esc(t.long) + '<br>One strong version: <b>' + esc(t.model) + '</b><br><span class="meta">Checks: ' + t.checks.map(esc).join(" · ") + '</span></div>').join("");
+$("models").innerHTML = '<p class="meta"><b>Version A</b> (41 points, 5 typed lines): the page the 12:30 class used in class on Wednesday, October 14. <b>Version B</b> (54 points, 4 typed lines): the page published Wednesday afternoon, with the Teams meeting email. Each record says which version it is.</p><p class="meta"><b>Version B lines</b></p>' + TYPED_B.map((t, k) => '<div class="model"><b>' + (k+1) + '. ' + esc(t.where) + '</b> (limit ' + t.limit + ' words)<br>Long version: ' + esc(t.long) + '<br>One strong version: <b>' + esc(t.model) + '</b><br><span class="meta">Checks: ' + t.checks.map(esc).join(" · ") + '</span></div>').join("") + '<p class="meta"><b>Version A lines</b></p>' + TYPED_A.map((t, k) => '<div class="model"><b>' + (k+1) + '. ' + esc(t.where) + '</b> (limit ' + t.limit + ' words)<br>Long version: ' + esc(t.long) + '<br>One strong version: <b>' + esc(t.model) + '</b><br><span class="meta">Checks: ' + t.checks.map(esc).join(" · ") + '</span></div>').join("");
 $("loadBtn").addEventListener("click", load);
 $("section").addEventListener("change", () => { lsSet("lio_section", $("section").value); rows = []; roster = []; paint(); if($("key").value.trim()) load(); });
 $("activity").addEventListener("change", () => { lsSet("lio_activity", $("activity").value); if($("key").value.trim()) load(); });
