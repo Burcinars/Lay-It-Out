@@ -326,7 +326,7 @@ var CONFIG = {
   ENDPOINT: 'https://script.google.com/macros/s/AKfycbz8sy_FMZsIJuAOQOtbmRqBn-P03bvZCW-Dev7BEBSWBblCSi0RF1CMTMS39JCzWvTgOQ/exec',
   SALT1: 'northline-ctstate-2026',
   ACTIVITY: 'LIO1',
-  VERSION: 'lio1-2026-10-14b',
+  VERSION: 'lio1-2026-10-14c',
   SECTIONS: {'13046': {label:'CRN 13046', sub:'In person · Mon/Wed 12:30'}, '13901': {label:'CRN 13901', sub:'Live online · Mon/Wed 5:30'}}
 };
 var QS = (function(){ try { return new URLSearchParams(location.search); } catch(e){ return {get:function(){ return null; }}; } })();
@@ -394,7 +394,7 @@ function modeBox(){
   return '<div class="modebox">' +
     '<div class="modehead">Choose one</div>' +
     '<button class="btn blue wide" type="button" id="goClass">🎓 Class version (for points) ➤</button>' +
-    '<p class="small modenote">Use this in class. You need the <b>class code</b> your professor gives you. Your points and the lines you type are saved for your professor.</p>' +
+    '<p class="small modenote">Use this in class. You need the <b>class code</b> your professor gives you. Your points and the lines you type are saved for your professor. <b>Only for students who were in class the day the code was given.</b> Start times are matched with attendance. If you were not in class, this activity is a <b>zero</b> for you.</p>' +
     '<button class="btn soft wide" type="button" id="goPractice">Practice only</button>' +
     '<p class="small modenote">Nothing is saved. No points count.</p>' +
     '<p class="small" style="margin:4px 0 0"><button class="linkbtn" type="button" id="goLookup">Already finished? Check that your result was saved.</button></p>' +
